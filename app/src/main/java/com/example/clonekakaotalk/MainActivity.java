@@ -6,7 +6,8 @@ import android.widget.ExpandableListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.clonekakaotalk.utils.expandableListView.ExpandableListViewAdapter;
+import com.example.clonekakaotalk.domain.Profile;
+import com.example.clonekakaotalk.utils.expandableListView.ProfileExpandableListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +15,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ExpandableListAdapter expandableListAdapter;
-    ExpandableListView expandableListView;
+    ExpandableListAdapter profileExpandableListAdapter;
+    ExpandableListView profileExpandableListView;
     List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    HashMap<String, List<Profile>> listDataChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +26,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // get the listView
-        expandableListView = findViewById(R.id.birthday_friends_list);
+        profileExpandableListView = findViewById(R.id.birthday_friends_list);
 
         // preparing list data
         prepareListData();
 
-        expandableListAdapter = new ExpandableListViewAdapter(this, listDataHeader, listDataChild);
+        profileExpandableListAdapter = new ProfileExpandableListViewAdapter(this, listDataHeader, listDataChild);
 
-        expandableListView.setAdapter(expandableListAdapter);
+        profileExpandableListView.setAdapter(profileExpandableListAdapter);
     }
 
     /**
@@ -40,14 +41,18 @@ public class MainActivity extends AppCompatActivity {
      */
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        listDataChild = new HashMap<String, List<Profile>>();
 
         // Adding child data
-        listDataHeader.add("Friends with Birthdays");
+        listDataHeader.add("Friends with Birthdays"); // TODO is it better to make enum or something..?
+        listDataHeader.add("Favorites");
+        listDataHeader.add("Channel");
+        listDataHeader.add("Friends");
 
         // Adding child data
-        List<String> firendsWithBirthDays = new ArrayList<String>();
-        firendsWithBirthDays.add("dummy friends"); // it should be profile component
+        List<Profile> firendsWithBirthDays = new ArrayList<>();
+        firendsWithBirthDays.add(new Profile("friend1", "Hello world!"));
+        firendsWithBirthDays.add(new Profile("friend2", "Hola world!"));
 
         listDataChild.put(listDataHeader.get(0), firendsWithBirthDays); // Header, Child data
     }
