@@ -25,6 +25,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         this._listDataChild = listChildData;
     }
 
+    // TODO change return type to... may be Child? (need to create as well)
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
         return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
@@ -45,7 +46,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             convertView = layoutInflater.inflate(R.layout.list_item, null);
         }
 
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.list_view_item);
+        TextView txtListChild = (TextView) convertView.findViewById(R.id.my_nickname);
 
         txtListChild.setText(childText);
         return convertView;
@@ -56,6 +57,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         return this._listDataChild.get(this._listDataHeader.get(groupPosition)).size();
     }
 
+    // TODO change return type to... may be Group? (need to create as well)
     @Override
     public Object getGroup(int groupPosition) {
         return this._listDataHeader.get(groupPosition);
