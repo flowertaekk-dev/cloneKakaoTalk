@@ -8,18 +8,19 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.example.clonekakaotalk.R;
+import com.example.clonekakaotalk.domain.Profile;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
+public class ProfileExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private HashMap<String, List<Profile>> _listDataChild;
 
-    public ExpandableListViewAdapter(Context context, List<String> listDataHeader, HashMap<String, List<String>> listChildData) {
+    public ProfileExpandableListViewAdapter(Context context, List<String> listDataHeader, HashMap<String, List<Profile>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -27,7 +28,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     // TODO change return type to... may be Child? (need to create as well)
     @Override
-    public Object getChild(int groupPosition, int childPosititon) {
+    public Profile getChild(int groupPosition, int childPosititon) {
         return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
     }
 
@@ -39,27 +40,37 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final Profile profile = getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_item, null);
         }
 
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.my_nickname);
+        TextView textViewNickName = convertView.findViewById(R.id.my_nickname);
+        textViewNickName.setText(profile.getNickname());
 
-        txtListChild.setText(childText);
+        TextView textViewProfileName = convertView.findViewById(R.id.my_profile_name);
+        textViewProfileName.setText(profile.getProfileName());
+
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).size();
+
+        String currentHeader = this._listDataHeader.get(groupPosition);
+
+        // if there is not a friend registered
+        if (this._listDataChild.get(currentHeader) == null) {
+            return 0;
+        }
+
+        return this._listDataChild.get(currentHeader).size();
     }
 
-    // TODO change return type to... may be Group? (need to create as well)
     @Override
-    public Object getGroup(int groupPosition) {
+    public String getGroup(int groupPosition) {
         return this._listDataHeader.get(groupPosition);
     }
 
@@ -75,7 +86,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
+        String headerTitle = getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_group, null);
