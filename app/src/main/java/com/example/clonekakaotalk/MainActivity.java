@@ -1,6 +1,7 @@
 package com.example.clonekakaotalk;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
@@ -28,12 +29,39 @@ public class MainActivity extends AppCompatActivity {
         // get the listView
         profileExpandableListView = findViewById(R.id.birthday_friends_list);
 
+        // get current device's width
+        int width = getCurrentScreenWidth();
+
+        // set indicator to right side.
+        profileExpandableListView.setIndicatorBounds(width - getDipsFromPixel(25), width - getDipsFromPixel(5));
+
         // preparing list data
         prepareListData();
 
         profileExpandableListAdapter = new ProfileExpandableListViewAdapter(this, listDataHeader, listDataChild);
 
         profileExpandableListView.setAdapter(profileExpandableListAdapter);
+    }
+
+    /**
+     * Retrieve current device's width.
+     */
+    private int getCurrentScreenWidth() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        return metrics.widthPixels;
+    }
+
+    //Convert pixel to dip
+
+    /**
+     * Convert pixel to dip
+     */
+    public int getDipsFromPixel(float pixels) {
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (pixels * scale + 0.5f);
     }
 
     /**
