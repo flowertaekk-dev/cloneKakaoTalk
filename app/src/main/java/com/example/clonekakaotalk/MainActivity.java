@@ -80,9 +80,24 @@ public class MainActivity extends AppCompatActivity {
 
         // Adding child data
         List<Profile> firendsWithBirthDays = new ArrayList<>();
-        firendsWithBirthDays.add(new Profile("friend1", "Hello world!"));
-        firendsWithBirthDays.add(new Profile("friend2", "Hola world!"));
+        firendsWithBirthDays.add(new Profile("birthday friend1", "Hello world!"));
+        firendsWithBirthDays.add(new Profile("birthday friend2", "Hola world!"));
+
+        List<Profile> favorites = new ArrayList<>();
+        favorites.add(new Profile("favorite friend", "Happy birthday"));
+
+        List<Profile> channel = new ArrayList<>();
+        channel.add(new Profile("Channel dummy", "Welcome!"));
+
+        List<Profile> friends = new ArrayList<>();
+        friends.add(new Profile("friend1", "Stay humble"));
+        friends.add(new Profile("friend2", "move move"));
+        friends.add(new Profile("friend3", "Cheer up!"));
+
 
         listDataChild.put(listDataHeader.get(0), firendsWithBirthDays); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), favorites); // Header, Child data
+        listDataChild.put(listDataHeader.get(2), channel); // Header, Child data
+        listDataChild.put(listDataHeader.get(3), friends); // Header, Child data
     }
 }

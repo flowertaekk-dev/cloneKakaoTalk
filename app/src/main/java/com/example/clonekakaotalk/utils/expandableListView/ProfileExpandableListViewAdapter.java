@@ -26,7 +26,6 @@ public class ProfileExpandableListViewAdapter extends BaseExpandableListAdapter 
         this._listDataChild = listChildData;
     }
 
-    // TODO change return type to... may be Child? (need to create as well)
     @Override
     public Profile getChild(int groupPosition, int childPosititon) {
         return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
