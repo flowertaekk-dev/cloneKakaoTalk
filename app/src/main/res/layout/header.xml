@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorWhite"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <TextView
+        android:id="@+id/header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/friends_title"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/header_setting_btn"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/setting_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/header_music_btn"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/music_img"
+        app:layout_constraintEnd_toStartOf="@+id/header_setting_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/header_add_user_btn"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/add_user_img"
+        app:layout_constraintEnd_toStartOf="@+id/header_music_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/header_search_btn"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/search_img"
+        app:layout_constraintEnd_toStartOf="@+id/header_add_user_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

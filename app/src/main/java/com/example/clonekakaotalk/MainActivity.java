@@ -25,9 +25,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("Friends");
 
         // get the listView
-        profileExpandableListView = findViewById(R.id.birthday_friends_list);
+        profileExpandableListView = findViewById(R.id.friends_list);
 
         // get current device's width
         int width = getCurrentScreenWidth();

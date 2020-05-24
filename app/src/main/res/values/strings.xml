@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CloneKakaoTalk</string>
+    <string name="friends_title">Friends</string>
 </resources>
