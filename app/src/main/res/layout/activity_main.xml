@@ -30,6 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/friends_list_profile"
         android:layout_above="@+id/friends_list_footer"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:childDivider="#00000000"
         android:divider="#00000000"
         android:listSelector="@android:color/transparent" />
