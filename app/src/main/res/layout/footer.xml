@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:layout_margin="0dp"
+    android:background="@color/colorGray">
+
+    <Button
+        android:id="@+id/friends_list_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:background="@color/colorGray"
+        android:stateListAnimator="@null"
+        android:text="1"/>
+
+    <Button
+        android:id="@+id/chatting_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:background="@color/colorGray"
+        android:stateListAnimator="@null"
+        android:text="2"/>
+
+    <Button
+        android:id="@+id/news_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:background="@color/colorGray"
+        android:stateListAnimator="@null"
+        android:text="3"/>
+
+    <Button
+        android:id="@+id/more_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:background="@color/colorGray"
+        android:stateListAnimator="@null"
+        android:text="4"/>
+
+</LinearLayout>

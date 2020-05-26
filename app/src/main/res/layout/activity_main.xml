@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorWhite"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <!-- Header -->
 
-    <include layout="@layout/header" />
+    <include
+        layout="@layout/header"
+        android:id="@+id/friends_list_header" />
 
     <!-- My profile -->
 
-    <include layout="@layout/profile_component"/>
+    <include
+        layout="@layout/profile_component"
+        android:id="@+id/friends_list_profile"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/friends_list_header" />
 
     <!--  Birthday friends list -->
 
@@ -22,8 +28,18 @@
         android:id="@+id/friends_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:listSelector="@android:color/transparent"
+        android:layout_below="@+id/friends_list_profile"
+        android:layout_above="@+id/friends_list_footer"
+        android:childDivider="#00000000"
         android:divider="#00000000"
-        android:childDivider="#00000000"/>
+        android:listSelector="@android:color/transparent" />
 
-</LinearLayout>
+    <!-- Footer -->
+
+    <include
+        layout="@layout/footer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

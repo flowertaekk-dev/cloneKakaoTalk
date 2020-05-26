@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         friends.add(new Profile("friend2", "move move"));
         friends.add(new Profile("friend3", "Cheer up!"));
 
-
         listDataChild.put(listDataHeader.get(0), firendsWithBirthDays); // Header, Child data
         listDataChild.put(listDataHeader.get(1), favorites); // Header, Child data
         listDataChild.put(listDataHeader.get(2), channel); // Header, Child data
