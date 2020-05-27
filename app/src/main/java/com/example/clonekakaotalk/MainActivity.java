@@ -1,9 +1,13 @@
 package com.example.clonekakaotalk;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -98,5 +102,16 @@ public class MainActivity extends AppCompatActivity {
         listDataChild.put(listDataHeader.get(1), favorites); // Header, Child data
         listDataChild.put(listDataHeader.get(2), channel); // Header, Child data
         listDataChild.put(listDataHeader.get(3), friends); // Header, Child data
+    }
+
+    /**
+     * Move to Profile view.
+     */
+    public void profileClicked(View view) {
+        TextView textView = view.findViewById(R.id.my_nickname);
+        Toast.makeText(this, "Profile clicked : " + textView.getText().toString(), Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(this, ProfileDetailActivity.class);
+        startActivity(intent);
     }
 }
