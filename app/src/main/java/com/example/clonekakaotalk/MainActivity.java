@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static String PROFILE_FROM_MAIN_ACTIVITY = "PROFILE_FROM_MAIN_ACTIVITY";
 
     ExpandableListAdapter profileExpandableListAdapter;
     ExpandableListView profileExpandableListView;
@@ -73,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
      * create dummy data for now.
      */
     private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<Profile>>();
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
 
         // Adding child data
         listDataHeader.add("Friends with Birthdays"); // TODO is it better to make enum or something..?
@@ -83,22 +84,22 @@ public class MainActivity extends AppCompatActivity {
         listDataHeader.add("Friends");
 
         // Adding child data
-        List<Profile> firendsWithBirthDays = new ArrayList<>();
-        firendsWithBirthDays.add(new Profile("birthday friend1", "Hello world!"));
-        firendsWithBirthDays.add(new Profile("birthday friend2", "Hola world!"));
+        List<Profile> friendsWithBirthDays = new ArrayList<>();
+        friendsWithBirthDays.add(Profile.builder().profileName("birthday friend1").nickname(("Hello world!")).build());
+        friendsWithBirthDays.add(Profile.builder().profileName("birthday friend2").nickname(("Hello world!")).build());
 
         List<Profile> favorites = new ArrayList<>();
-        favorites.add(new Profile("favorite friend", "Happy birthday"));
+        favorites.add(Profile.builder().profileName("favorite friend").nickname(("Happy birthday")).build());
 
         List<Profile> channel = new ArrayList<>();
-        channel.add(new Profile("Channel dummy", "Welcome!"));
+        channel.add(Profile.builder().profileName("Channel dummy").nickname(("Welcome!")).build());
 
         List<Profile> friends = new ArrayList<>();
-        friends.add(new Profile("friend1", "Stay humble"));
-        friends.add(new Profile("friend2", "move move"));
-        friends.add(new Profile("friend3", "Cheer up!"));
+        friends.add(Profile.builder().profileName("friend1").nickname(("Stay humble!")).build());
+        friends.add(Profile.builder().profileName("friend2").nickname(("move move!")).build());
+        friends.add(Profile.builder().profileName("friend3").nickname(("Cheer up!")).build());
 
-        listDataChild.put(listDataHeader.get(0), firendsWithBirthDays); // Header, Child data
+        listDataChild.put(listDataHeader.get(0), friendsWithBirthDays); // Header, Child data
         listDataChild.put(listDataHeader.get(1), favorites); // Header, Child data
         listDataChild.put(listDataHeader.get(2), channel); // Header, Child data
         listDataChild.put(listDataHeader.get(3), friends); // Header, Child data
@@ -108,10 +109,19 @@ public class MainActivity extends AppCompatActivity {
      * Move to Profile view.
      */
     public void profileClicked(View view) {
-        TextView textView = view.findViewById(R.id.my_nickname);
-        Toast.makeText(this, "Profile clicked : " + textView.getText().toString(), Toast.LENGTH_LONG).show();
+        TextView myNickNameView = view.findViewById(R.id.my_nickname);
+        TextView myProfileNameView = view.findViewById(R.id.my_profile_name);
+
+        String clickedProfileName = myProfileNameView.getText().toString();
+        String clickedNickName = myNickNameView.getText().toString();
+
+        Profile clickedProfile = Profile.builder()
+                .profileName(clickedProfileName)
+                .nickname(clickedNickName)
+                .build();
 
         Intent intent = new Intent(this, ProfileDetailActivity.class);
+        intent.putExtra(PROFILE_FROM_MAIN_ACTIVITY, clickedProfile);
         startActivity(intent);
     }
 }

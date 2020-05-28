@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">CloneKakaoTalk</string>
     <string name="friends_title">Friends</string>
+    <string name="free_chat">Free chat</string>
+    <string name="call">Call</string>
+
+
+    <!-- ImageButton description  -->
+    <string name="profile_return_button">Go back button</string>
+    <string name="favorite_button">Favorite button</string>
+    <string name="transit_button">Bank transit button</string>
+    <string name="gift_button">Gift button</string>
+    <string name="profile_detail_profile_picture">Profile picture</string>
+    <string name="profile_detail_chatting_image">Go to Chatting</string>
+    <string name="profile_detail_call_image">make a call</string>
+
+
 </resources>
