@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.clonekakaotalk.utils.onclickhandler.FooterOnclickHandler;
-
 public class ChattingListActivity extends AppCompatActivity {
 
     TextView headerText;
@@ -45,9 +43,5 @@ public class ChattingListActivity extends AppCompatActivity {
         Button chattingListButton = findViewById(R.id.chatting_list_button);
         Button newsButton = findViewById(R.id.news_button);
         Button moreButton = findViewById(R.id.more_button);
-
-        FooterOnclickHandler.FooterButton
-                .CHATTING_LIST_BUTTON
-                .updateFooterImage(friendsListButton, chattingListButton, newsButton, moreButton);
     }
 }
