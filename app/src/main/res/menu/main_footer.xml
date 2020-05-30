@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/friends_list_item"
+        android:icon="@drawable/fragment_friends_list_icon"
+        android:title=""/>
+
+    <item
+        android:id="@+id/chatting_list_item"
+        android:icon="@drawable/fragment_chatting_list_icon"
+        android:title="" />
+
+    <item
+        android:id="@+id/news_item"
+        android:icon="@drawable/fragment_news_icon"
+        android:title="" />
+
+    <item
+        android:id="@+id/more_item"
+        android:icon="@drawable/fragment_more_icon"
+        android:title="" />
+
+</menu>

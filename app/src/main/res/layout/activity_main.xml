@@ -3,45 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorWhite"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- Header -->
-
-    <include
-        layout="@layout/header"
-        android:id="@+id/friends_list_header" />
-
-    <!-- My profile -->
-
-    <include
-        layout="@layout/profile_component"
-        android:id="@+id/friends_list_profile"
+    <FrameLayout
+        android:id="@+id/main_frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@+id/friends_list_header" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/main_footer" />
 
-    <!--  Birthday friends list -->
+    <!-- FOOTER -->
 
-    <ExpandableListView
-        android:id="@+id/friends_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/friends_list_profile"
-        android:layout_above="@+id/friends_list_footer"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:childDivider="#00000000"
-        android:divider="#00000000"
-        android:listSelector="@android:color/transparent" />
-
-    <!-- Footer -->
-
-    <include
-        layout="@layout/footer"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_footer"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true" />
+        app:itemBackground="@color/colorGray"
+        app:labelVisibilityMode="unlabeled"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/main_footer"/>
 
 </RelativeLayout>

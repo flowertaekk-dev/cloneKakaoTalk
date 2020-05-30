@@ -1,14 +1,19 @@
 package com.example.clonekakaotalk.utils.expandableListView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.clonekakaotalk.ProfileDetailActivity;
 import com.example.clonekakaotalk.R;
 import com.example.clonekakaotalk.domain.Profile;
+import com.example.clonekakaotalk.utils.footer.FragmentFriendsList;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +47,7 @@ public class ProfileExpandableListViewAdapter extends BaseExpandableListAdapter 
         final Profile profile = getChild(groupPosition, childPosition);
 
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_item, null);
         }
 
@@ -51,6 +56,17 @@ public class ProfileExpandableListViewAdapter extends BaseExpandableListAdapter 
 
         TextView textViewProfileName = convertView.findViewById(R.id.my_profile_name);
         textViewProfileName.setText(profile.getProfileName());
+
+        // setOnClickListener event
+        LinearLayout profileContainer = convertView.findViewById(R.id.profile_container);
+        profileContainer.setOnClickListener(new ExpandableListView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(_context, ProfileDetailActivity.class);
+                intent.putExtra(FragmentFriendsList.PROFILE_FROM_FRIENDS_LIST_ACTIVITY, profile);
+                _context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }

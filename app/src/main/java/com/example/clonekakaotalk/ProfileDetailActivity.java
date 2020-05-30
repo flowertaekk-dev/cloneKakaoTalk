@@ -7,10 +7,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clonekakaotalk.domain.Profile;
+import com.example.clonekakaotalk.utils.footer.FragmentFriendsList;
 
 public class ProfileDetailActivity extends AppCompatActivity {
-
-    public static String PROFILE_FROM_MAIN_ACTIVITY = "PROFILE_FROM_MAIN_ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class ProfileDetailActivity extends AppCompatActivity {
     private void initProfileDataFromIntent(Intent intent) {
         if (intent != null) {
             Bundle bundle = intent.getExtras();
-            Profile profile = bundle.getParcelable(PROFILE_FROM_MAIN_ACTIVITY);
+            Profile profile = bundle.getParcelable(FragmentFriendsList.PROFILE_FROM_FRIENDS_LIST_ACTIVITY);
 
             if (intent != null) {
                 TextView profileNickNameView = findViewById(R.id.profile_detail_profile_nickname);

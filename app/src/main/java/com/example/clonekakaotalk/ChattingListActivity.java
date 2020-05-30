@@ -38,7 +38,7 @@ public class ChattingListActivity extends AppCompatActivity {
 
     // TODO DRY!!!!!! How?
     private void initFooterImage() {
-        // footer image change. (I do not want to waste of my energy finding the image. so I just use number.
+        // main_footer image change. (I do not want to waste of my energy finding the image. so I just use number.
         Button friendsListButton = findViewById(R.id.friends_list_button);
         Button chattingListButton = findViewById(R.id.chatting_list_button);
         Button newsButton = findViewById(R.id.news_button);
