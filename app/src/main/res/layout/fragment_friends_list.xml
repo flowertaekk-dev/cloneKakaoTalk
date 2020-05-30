@@ -32,6 +32,7 @@
         android:layout_marginRight="10dp"
         android:childDivider="#00000000"
         android:divider="#00000000"
+        android:layoutDirection="rtl"
         android:listSelector="@android:color/transparent" />
 
 </RelativeLayout>

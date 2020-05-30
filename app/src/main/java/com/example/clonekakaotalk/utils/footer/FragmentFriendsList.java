@@ -55,7 +55,7 @@ public class FragmentFriendsList extends Fragment {
         int width = _getCurrentScreenWidth();
 
         // set indicator to right side.
-        _profileExpandableListView.setIndicatorBounds(width - _getDipsFromPixel(25), width - _getDipsFromPixel(5));
+        // _profileExpandableListView.setIndicatorBounds(width - _getDipsFromPixel(25), width - _getDipsFromPixel(5));
 
         // preparing list data
         _prepareListData();
