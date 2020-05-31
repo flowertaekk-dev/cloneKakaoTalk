@@ -1,7 +1,11 @@
 package com.example.clonekakaotalk.utils.footer;
 
+import android.content.res.Resources;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,11 +55,9 @@ public class FragmentFriendsList extends Fragment {
      * Initialize Friends list
      */
     private void _initializeFriendsList(View friendsListView) {
-        // get current device's width
-        int width = _getCurrentScreenWidth();
 
         // set indicator to right side.
-        // _profileExpandableListView.setIndicatorBounds(width - _getDipsFromPixel(25), width - _getDipsFromPixel(5));
+        _setIndicatorToRightSide();
 
         // preparing list data
         _prepareListData();
@@ -66,24 +68,20 @@ public class FragmentFriendsList extends Fragment {
     }
 
     /**
-     * Retrieve current device's width.
+     * set ExpandableListView's indicator to right side.
      */
-    private int _getCurrentScreenWidth() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        return metrics.widthPixels;
-    }
-
-    //Convert pixel to dip
-
-    /**
-     * Convert pixel to dip
-     */
-    private int _getDipsFromPixel(float pixels) {
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        return (int) (pixels * scale + 0.5f);
+    private void _setIndicatorToRightSide() {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        Resources r = getResources();
+        int px = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            _profileExpandableListView.setIndicatorBounds(width - px, width);
+        } else {
+            _profileExpandableListView.setIndicatorBoundsRelative(width - px, width);
+        }
     }
 
     /**
