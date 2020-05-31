@@ -24,14 +24,21 @@
             android:id="@+id/my_nickname"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
+            android:gravity="bottom"
             android:layout_weight="1"
+            android:textStyle="bold"
             android:text=";"/>
 
         <TextView
             android:id="@+id/my_profile_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginRight="3dp"
+            android:gravity="top"
             android:layout_weight="1"
+            android:textColor="#ccc"
+            android:textSize="13sp"
             android:text="Code Poet"/>
 
     </LinearLayout>
