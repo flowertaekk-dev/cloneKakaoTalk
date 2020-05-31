@@ -30,7 +30,7 @@ public class ProfileDetailActivity extends AppCompatActivity {
 
             if (intent != null) {
                 TextView profileNickNameView = findViewById(R.id.profile_detail_profile_nickname);
-                profileNickNameView.setText(profile.getProfileName());
+                profileNickNameView.setText(profile.getNickname());
             }
         }
     }

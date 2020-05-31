@@ -99,19 +99,19 @@ public class FragmentFriendsList extends Fragment {
 
         // Adding child data
         List<Profile> friendsWithBirthDays = new ArrayList<>();
-        friendsWithBirthDays.add(Profile.builder().profileName("birthday friend1").nickname(("Hello world!")).build());
-        friendsWithBirthDays.add(Profile.builder().profileName("birthday friend2").nickname(("Hello world!")).build());
+        friendsWithBirthDays.add(Profile.builder().profileName("Hello world!").nickname(("birthday friend1")).build());
+        friendsWithBirthDays.add(Profile.builder().profileName("Hello world!").nickname(("birthday friend2")).build());
 
         List<Profile> favorites = new ArrayList<>();
-        favorites.add(Profile.builder().profileName("favorite friend").nickname(("Happy birthday")).build());
+        favorites.add(Profile.builder().profileName("Happy birthday").nickname(("favorite friend")).build());
 
         List<Profile> channel = new ArrayList<>();
-        channel.add(Profile.builder().profileName("Channel dummy").nickname(("Welcome!")).build());
+        channel.add(Profile.builder().profileName("Welcome!").nickname(("Channel dummy")).build());
 
         List<Profile> friends = new ArrayList<>();
-        friends.add(Profile.builder().profileName("friend1").nickname(("Stay humble!")).build());
-        friends.add(Profile.builder().profileName("friend2").nickname(("move move!")).build());
-        friends.add(Profile.builder().profileName("friend3").nickname(("Cheer up!")).build());
+        friends.add(Profile.builder().profileName("Stay humble!").nickname(("friend1")).build());
+        friends.add(Profile.builder().profileName("move move!").nickname(("friend2")).build());
+        friends.add(Profile.builder().profileName("Cheer up!").nickname(("friend3")).build());
 
         _listDataChild.put(_listDataHeader.get(0), friendsWithBirthDays); // Header, Child data
         _listDataChild.put(_listDataHeader.get(1), favorites); // Header, Child data
