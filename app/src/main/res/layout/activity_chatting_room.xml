@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChattingRoomActivity">
+
+    <!-- HEADER -->
+    <RelativeLayout
+        android:id="@+id/chatting_room_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <!-- GO BACK BUTTON -->
+        <ImageButton
+            android:id="@+id/chatting_room_go_back_btn"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:background="@color/colorTransparent"
+            android:contentDescription="Go back button"
+            android:src="?attr/actionModeCloseDrawable"/>
+
+        <!-- CHATTING ROOM NAME -->
+        <TextView
+            android:id="@+id/chatting_room_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@id/chatting_room_go_back_btn"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="dummy"/>
+
+        <!-- SIDE BAR BUTTON -->
+        <ImageButton
+            android:id="@+id/chatting_room_side_bar_btn"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:contentDescription="Side bar button"
+            android:background="@color/colorTransparent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@android:drawable/ic_menu_sort_by_size"/>
+
+        <!-- SEARCH BUTTON -->
+        <ImageButton
+            android:id="@+id/chatting_room_search_button"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:contentDescription="Search word button"
+            android:background="@color/colorTransparent"
+            android:scaleType="fitCenter"
+            android:layout_toStartOf="@+id/chatting_room_side_bar_btn"
+            android:layout_toLeftOf="@+id/chatting_room_side_bar_btn"
+            android:src="@drawable/search_img"/>
+
+    </RelativeLayout>
+
+    <!-- BODY -->
+
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        layout_-->
+<!--        />-->
+    <ListView
+        android:id="@+id/chatting_room_chatting"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_below="@+id/chatting_room_header_container"
+        android:layout_above="@+id/chatting_room_footer_container" />
+
+    <!-- FOOTER -->
+
+    <LinearLayout
+        android:id="@+id/chatting_room_footer_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tempId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="TEMP FOOTER"
+            android:textSize="30dp"
+            android:gravity="center_vertical|center_horizontal"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

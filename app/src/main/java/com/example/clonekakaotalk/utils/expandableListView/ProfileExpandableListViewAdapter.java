@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.clonekakaotalk.ProfileDetailActivity;
 import com.example.clonekakaotalk.R;
 import com.example.clonekakaotalk.domain.Profile;
-import com.example.clonekakaotalk.utils.footer.FragmentFriendsList;
+import com.example.clonekakaotalk.utils.defs.ParcelKeys;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +63,7 @@ public class ProfileExpandableListViewAdapter extends BaseExpandableListAdapter 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(_context, ProfileDetailActivity.class);
-                intent.putExtra(FragmentFriendsList.PROFILE_FROM_FRIENDS_LIST_ACTIVITY, profile);
+                intent.putExtra(ParcelKeys.CURRNET_SELECTED_PROFILE.name(), profile);
                 _context.startActivity(intent);
             }
         });

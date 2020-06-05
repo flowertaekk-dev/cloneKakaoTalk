@@ -13,7 +13,7 @@
         android:id="@+id/profile_detail_return_button"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
-        android:background="#00000000"
+        android:background="@color/colorTransparent"
         android:contentDescription="@string/profile_return_button"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
@@ -23,7 +23,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="#00000000"
+        android:background="@color/colorTransparent"
         app:srcCompat="@android:drawable/btn_star"
         android:contentDescription="@string/profile_return_button" />
 
@@ -33,7 +33,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_toStartOf="@+id/profile_detail_favorite_button"
         android:layout_toLeftOf="@+id/profile_detail_favorite_button"
-        android:background="#00000000"
+        android:background="@color/colorTransparent"
         android:contentDescription="@string/transit_button"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
@@ -43,7 +43,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_toStartOf="@+id/profile_detail_transit_button"
         android:layout_toLeftOf="@+id/profile_detail_transit_button"
-        android:background="#00000000"
+        android:background="@color/colorTransparent"
         android:contentDescription="@string/gift_button"
         app:srcCompat="@android:drawable/ic_menu_save" />
 
@@ -89,6 +89,7 @@
         android:baselineAligned="false"
         android:background="@drawable/custom_border">
 
+        <!-- FREE CHAT -->
         <LinearLayout
             android:id="@+id/profile_detail_chatting_container"
             android:layout_width="match_parent"
@@ -115,6 +116,7 @@
 
         </LinearLayout>
 
+        <!-- CALL -->
         <LinearLayout
             android:id="@+id/profile_detail_call_container"
             android:layout_width="match_parent"

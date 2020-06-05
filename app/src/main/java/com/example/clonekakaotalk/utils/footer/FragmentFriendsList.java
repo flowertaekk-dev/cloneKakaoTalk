@@ -27,7 +27,7 @@ import java.util.List;
 
 public class FragmentFriendsList extends Fragment {
 
-    public static String PROFILE_FROM_FRIENDS_LIST_ACTIVITY = "PROFILE_FROM_FRIENDS_LIST_ACTIVITY";
+    public static String CURRNET_SELECTED_PROFILE = "PROFILE_FROM_FRIENDS_LIST_ACTIVITY";
 
     private ExpandableListAdapter _profileExpandableListAdapter;
     private ExpandableListView _profileExpandableListView;
