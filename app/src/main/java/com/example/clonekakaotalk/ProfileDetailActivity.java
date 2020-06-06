@@ -43,7 +43,7 @@ public class ProfileDetailActivity extends AppCompatActivity {
     private void _initProfileDataFromIntent(Intent intent) {
         if (intent != null) {
             Bundle bundle = intent.getExtras();
-            _selectedProfile = bundle.getParcelable(ParcelKeys.CURRNET_SELECTED_PROFILE.name());
+            _selectedProfile = bundle.getParcelable(ParcelKeys.CURRENT_SELECTED_PROFILE.name());
 
             if (_selectedProfile != null) {
                 TextView profileNickNameView = findViewById(R.id.profile_detail_profile_nickname);
@@ -77,7 +77,8 @@ public class ProfileDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChattingRoomActivity.class);
-                intent.putExtra(ParcelKeys.CURRNET_SELECTED_PROFILE.name(), _selectedProfile);
+                intent.putExtra(ParcelKeys.CURRENT_SELECTED_PROFILE.name(), _selectedProfile);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });

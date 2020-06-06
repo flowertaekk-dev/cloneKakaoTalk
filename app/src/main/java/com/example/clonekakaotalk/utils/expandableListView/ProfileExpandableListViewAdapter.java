@@ -63,7 +63,8 @@ public class ProfileExpandableListViewAdapter extends BaseExpandableListAdapter 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(_context, ProfileDetailActivity.class);
-                intent.putExtra(ParcelKeys.CURRNET_SELECTED_PROFILE.name(), profile);
+                intent.putExtra(ParcelKeys.CURRENT_SELECTED_PROFILE.name(), profile);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 _context.startActivity(intent);
             }
         });

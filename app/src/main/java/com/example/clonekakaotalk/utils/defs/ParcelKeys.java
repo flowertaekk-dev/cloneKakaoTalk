@@ -7,6 +7,6 @@ import lombok.Getter;
  */
 @Getter
 public enum ParcelKeys {
-    CURRNET_SELECTED_PROFILE,
+    CURRENT_SELECTED_PROFILE,
     ;
 }

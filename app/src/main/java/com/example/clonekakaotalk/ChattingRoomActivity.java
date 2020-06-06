@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.clonekakaotalk.domain.Profile;
 import com.example.clonekakaotalk.utils.defs.ParcelKeys;
+import com.example.clonekakaotalk.utils.defs.Transport;
 
 public class ChattingRoomActivity extends AppCompatActivity {
 
@@ -34,13 +35,25 @@ public class ChattingRoomActivity extends AppCompatActivity {
         // TODO what if null? -> better to make some pattern for DRY??
         if (intent != null) {
             Bundle bundle = intent.getExtras();
-            _selectedProfile = bundle.getParcelable(ParcelKeys.CURRNET_SELECTED_PROFILE.name());
+            _selectedProfile = bundle.getParcelable(ParcelKeys.CURRENT_SELECTED_PROFILE.name());
 
             if (_selectedProfile != null) {
                 TextView roomNameView = findViewById(R.id.chatting_room_room_name);
                 roomNameView.setText(_selectedProfile.getNickname());
             }
         }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // onClickEventListener
+
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra(Transport.FROM_CHATTING_ROOM.name(), Transport.FROM_CHATTING_ROOM.value());
+        startActivity(intent);
 
     }
 }
