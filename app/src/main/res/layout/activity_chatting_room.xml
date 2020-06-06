@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorChattingDefault"
     tools:context=".ChattingRoomActivity">
 
     <!-- HEADER -->
@@ -59,11 +60,6 @@
 
     <!-- BODY -->
 
-<!--    <ListView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        layout_-->
-<!--        />-->
     <ListView
         android:id="@+id/chatting_room_chatting"
         android:layout_width="match_parent"
@@ -73,21 +69,50 @@
 
     <!-- FOOTER -->
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/chatting_room_footer_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:background="@color/colorWhite"
+        android:layout_alignParentBottom="true">
 
-        <TextView
-            android:id="@+id/tempId"
-            android:layout_width="match_parent"
+        <!-- EXTRA FUNCTION BUTTON -->
+        <ImageButton
+            android:id="@+id/chatting_room_footer_add_menu_btn"
+            android:layout_width="?attr/actionBarSize"
             android:layout_height="match_parent"
-            android:text="TEMP FOOTER"
-            android:textSize="30dp"
-            android:gravity="center_vertical|center_horizontal"/>
+            android:background="@color/colorTransparent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:src="@android:drawable/ic_menu_add"/>
 
-    </LinearLayout>
+        <!-- CHATTING INPUT -->
+        <EditText
+            android:id="@+id/chatting_room_footer_chatting_input"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorTransparent"
+            android:layout_toRightOf="@+id/chatting_room_footer_add_menu_btn"
+            android:layout_toLeftOf="@+id/chatting_room_footer_emoticon_btn"/>
+
+
+        <ImageButton
+            android:id="@+id/chatting_room_footer_emoticon_btn"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/chatting_room_footer_search_with_hash_btn"
+            android:background="@color/colorTransparent"
+            android:src="@android:drawable/ic_menu_more"/>
+
+
+        <ImageButton
+            android:id="@+id/chatting_room_footer_search_with_hash_btn"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorTransparent"
+            android:src="@android:drawable/ic_menu_zoom"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>
