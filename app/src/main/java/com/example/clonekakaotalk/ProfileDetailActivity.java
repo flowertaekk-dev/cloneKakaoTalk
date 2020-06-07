@@ -78,7 +78,6 @@ public class ProfileDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChattingRoomActivity.class);
                 intent.putExtra(ParcelKeys.CURRENT_SELECTED_PROFILE.name(), _selectedProfile);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });
