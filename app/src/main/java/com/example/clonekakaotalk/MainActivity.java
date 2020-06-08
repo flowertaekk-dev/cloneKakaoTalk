@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        initWithChatsScreen(getIntent());
+        initWithChatsScreen(getIntent()); // When comes from ChattingRoom
     }
 
     @Override
