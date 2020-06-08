@@ -13,6 +13,8 @@
     <string name="profile_detail_profile_picture">Profile picture</string>
     <string name="profile_detail_chatting_image">Go to Chatting</string>
     <string name="profile_detail_call_image">make a call</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

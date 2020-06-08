@@ -73,27 +73,27 @@
         android:id="@+id/chatting_room_footer_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorWhite"
-        android:layout_alignParentBottom="true">
+        android:layout_above="@+id/chatting_room_footer_bottom_menu"
+        android:background="@color/colorWhite">
 
         <!-- EXTRA FUNCTION BUTTON -->
         <ImageButton
-            android:id="@+id/chatting_room_footer_add_menu_btn"
+            android:id="@+id/chatting_room_footer_menu_btn"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="match_parent"
-            android:background="@color/colorTransparent"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:src="@android:drawable/ic_menu_add"/>
+            android:background="@color/colorTransparent"
+            android:src="@android:drawable/ic_menu_add" />
 
         <!-- CHATTING INPUT -->
         <EditText
             android:id="@+id/chatting_room_footer_chatting_input"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/colorTransparent"
-            android:layout_toRightOf="@+id/chatting_room_footer_add_menu_btn"
-            android:layout_toLeftOf="@+id/chatting_room_footer_emoticon_btn"/>
+            android:layout_toLeftOf="@+id/chatting_room_footer_emoticon_btn"
+            android:layout_toRightOf="@+id/chatting_room_footer_menu_btn"
+            android:background="@color/colorTransparent" />
 
 
         <ImageButton
@@ -102,7 +102,7 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/chatting_room_footer_search_with_hash_btn"
             android:background="@color/colorTransparent"
-            android:src="@android:drawable/ic_menu_more"/>
+            android:src="@android:drawable/ic_menu_more" />
 
 
         <ImageButton
@@ -111,8 +111,14 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:background="@color/colorTransparent"
-            android:src="@android:drawable/ic_menu_zoom"/>
+            android:src="@android:drawable/ic_menu_zoom" />
 
     </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/chatting_room_footer_bottom_menu"/>
 
 </RelativeLayout>
