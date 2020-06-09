@@ -2,7 +2,9 @@ package com.example.clonekakaotalk;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -13,12 +15,14 @@ import com.example.clonekakaotalk.domain.Profile;
 import com.example.clonekakaotalk.utils.defs.ParcelKeys;
 import com.example.clonekakaotalk.utils.defs.Transport;
 import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoomBottomMenu;
+import com.example.clonekakaotalk.utils.windowSoftware.WindowSoft;
 
 public class ChattingRoomActivity extends AppCompatActivity {
 
     // Init
     private Profile _selectedProfile;
     private ImageButton _chattingRoomFooterMenuBtn;
+    private EditText _chattingInputEditText;
     private FragmentChattingRoomBottomMenu _fragmentChattingRoomBottomMenu = new FragmentChattingRoomBottomMenu();
 
     // Menu status
@@ -34,6 +38,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _initProfileFromParcel(intent);
 
         _initChattingMenuButtonClicked();
+        _initChattingInputEditText();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -61,10 +66,17 @@ public class ChattingRoomActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+
+        // remove BottomMenu
+        if (_isChattingMenuButtonOn) {
+            removeChattingBottomMenuButton();
+            return;
+        }
+
+        // go to ChattingList
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(Transport.FROM_CHATTING_ROOM.name(), Transport.FROM_CHATTING_ROOM.value());
         startActivity(intent);
-
     }
 
     /**
@@ -75,20 +87,61 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _chattingRoomFooterMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                WindowSoft.hideKeyboardFrom(getApplicationContext(), _chattingInputEditText);
 
                 // Create bottom menu
                 if (!_isChattingMenuButtonOn) {
-                    _isChattingMenuButtonOn = true;
-                    transaction.replace(R.id.chatting_room_footer_bottom_menu, _fragmentChattingRoomBottomMenu).commitAllowingStateLoss();
+                    showChattingBottomMenuButton();
 
                 // Remove bottom menu
                 } else {
-                    _isChattingMenuButtonOn = false;
-                    transaction.remove(_fragmentChattingRoomBottomMenu).commitAllowingStateLoss();
+                    removeChattingBottomMenuButton();
                 }
-
             }
         });
     }
+
+    // ---------------------------------------------------------------------------------------------
+    // OnTouchListener
+
+    private void _initChattingInputEditText() {
+        _chattingInputEditText = findViewById(R.id.chatting_room_footer_chatting_input);
+
+        _chattingInputEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // remove BottomMenu
+                if (_isChattingMenuButtonOn) {
+                    removeChattingBottomMenuButton();
+                    _chattingInputEditText.requestFocus();
+                }
+                return false;
+            }
+        });
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // UTIL
+
+    /**
+     * Make ChattingBottomMenu appear
+     */
+    private void showChattingBottomMenuButton() {
+        _isChattingMenuButtonOn = true;
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.chatting_room_footer_bottom_menu, _fragmentChattingRoomBottomMenu).commitAllowingStateLoss();
+    }
+
+    /**
+     * Make ChattingBottomMenu disappear
+     */
+    private void removeChattingBottomMenuButton() {
+        _isChattingMenuButtonOn = false;
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.remove(_fragmentChattingRoomBottomMenu).commitAllowingStateLoss();
+    }
+
 }
