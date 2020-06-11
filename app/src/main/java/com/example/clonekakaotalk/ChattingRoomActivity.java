@@ -9,13 +9,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.clonekakaotalk.domain.Profile;
 import com.example.clonekakaotalk.utils.defs.ParcelKeys;
 import com.example.clonekakaotalk.utils.defs.Transport;
 import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoomBottomMenu;
+import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoomEmoticonMenu;
 import com.example.clonekakaotalk.utils.windowSoftware.WindowSoft;
+
+import lombok.Getter;
 
 public class ChattingRoomActivity extends AppCompatActivity {
 
@@ -23,10 +27,6 @@ public class ChattingRoomActivity extends AppCompatActivity {
     private Profile _selectedProfile;
     private ImageButton _chattingRoomFooterMenuBtn;
     private EditText _chattingInputEditText;
-    private FragmentChattingRoomBottomMenu _fragmentChattingRoomBottomMenu = new FragmentChattingRoomBottomMenu();
-
-    // Menu status
-    private boolean _isChattingMenuButtonOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,8 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _initProfileFromParcel(intent);
 
         _initChattingMenuButtonClicked();
+        _initEmoticonMenuButtonClicked();
+
         _initChattingInputEditText();
     }
 
@@ -51,11 +53,14 @@ public class ChattingRoomActivity extends AppCompatActivity {
         // TODO what if null? -> better to make some pattern for DRY??
         if (intent != null) {
             Bundle bundle = intent.getExtras();
-            _selectedProfile = bundle.getParcelable(ParcelKeys.CURRENT_SELECTED_PROFILE.name());
 
-            if (_selectedProfile != null) {
-                TextView roomNameView = findViewById(R.id.chatting_room_room_name);
-                roomNameView.setText(_selectedProfile.getNickname());
+            if (bundle != null) {
+                _selectedProfile = bundle.getParcelable(ParcelKeys.CURRENT_SELECTED_PROFILE.name());
+
+                if (_selectedProfile != null) {
+                    TextView roomNameView = findViewById(R.id.chatting_room_room_name);
+                    roomNameView.setText(_selectedProfile.getNickname());
+                }
             }
         }
     }
@@ -68,8 +73,8 @@ public class ChattingRoomActivity extends AppCompatActivity {
         //super.onBackPressed();
 
         // remove BottomMenu
-        if (_isChattingMenuButtonOn) {
-            removeChattingBottomMenuButton();
+        if (Buttons.isAnyMenuActivated()) {
+            Buttons.removeAllMenu(getSupportFragmentManager().beginTransaction());
             return;
         }
 
@@ -87,20 +92,26 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _chattingRoomFooterMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 WindowSoft.hideKeyboardFrom(getApplicationContext(), _chattingInputEditText);
-
-                // Create bottom menu
-                if (!_isChattingMenuButtonOn) {
-                    showChattingBottomMenuButton();
-
-                // Remove bottom menu
-                } else {
-                    removeChattingBottomMenuButton();
-                }
+                Buttons.BOTTOM_MENU_BUTTON.showAndRemoveMenuByClickingButton(getSupportFragmentManager().beginTransaction());
             }
         });
     }
+
+    /**
+     * Slide up and down the Emoticon menu
+     */
+    private void _initEmoticonMenuButtonClicked() {
+        _chattingRoomFooterMenuBtn = findViewById(R.id.chatting_room_footer_emoticon_btn);
+        _chattingRoomFooterMenuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WindowSoft.hideKeyboardFrom(getApplicationContext(), _chattingInputEditText);
+                Buttons.EMOTICON_MENU_BUTTON.showAndRemoveMenuByClickingButton(getSupportFragmentManager().beginTransaction());
+            }
+        });
+    }
+
 
     // ---------------------------------------------------------------------------------------------
     // OnTouchListener
@@ -112,8 +123,8 @@ public class ChattingRoomActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // remove BottomMenu
-                if (_isChattingMenuButtonOn) {
-                    removeChattingBottomMenuButton();
+                if (Buttons.isAnyMenuActivated()) {
+                    Buttons.removeAllMenu(getSupportFragmentManager().beginTransaction());
                     _chattingInputEditText.requestFocus();
                 }
                 return false;
@@ -124,24 +135,92 @@ public class ChattingRoomActivity extends AppCompatActivity {
     // ---------------------------------------------------------------------------------------------
     // UTIL
 
-    /**
-     * Make ChattingBottomMenu appear
-     */
-    private void showChattingBottomMenuButton() {
-        _isChattingMenuButtonOn = true;
+    @Getter
+    private enum Buttons {
+        BOTTOM_MENU_BUTTON (false, new FragmentChattingRoomBottomMenu()),
+        EMOTICON_MENU_BUTTON (false, new FragmentChattingRoomEmoticonMenu()),
+        ;
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.chatting_room_footer_bottom_menu, _fragmentChattingRoomBottomMenu).commitAllowingStateLoss();
-    }
+        private boolean isOn;           // isClicked?
+        private Fragment fragment;
+        Buttons(boolean isOn, Fragment fragment) {
+            this.isOn = isOn;
+            this.fragment = fragment;
+        }
 
-    /**
-     * Make ChattingBottomMenu disappear
-     */
-    private void removeChattingBottomMenuButton() {
-        _isChattingMenuButtonOn = false;
+        private void setButtonStatus(boolean on) {
+            isOn = on;
+        }
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.remove(_fragmentChattingRoomBottomMenu).commitAllowingStateLoss();
+        /**
+         * Update buttons' status <br />
+         *
+         * <ul>
+         *     <li>clicked button -> ON</li>
+         *     <li>other buttons -> OFF</li>
+         * </ul>
+         */
+        private void updateButtonStatus() {
+
+            // If the same button clicked
+            if (isOn()) {
+                setButtonStatus(false);
+                return;
+            }
+
+            for (Buttons button : Buttons.values()) {
+                // update clicked button to On
+                if (button == this) {
+                    setButtonStatus(true);
+                    continue;
+                }
+
+                // set others to false
+                button.setButtonStatus(false);
+            }
+        }
+
+        /**
+         * Activate and deactivate menus
+         */
+        public void showAndRemoveMenuByClickingButton(FragmentTransaction transaction) {
+            updateButtonStatus();
+
+            if (isOn()) {
+                transaction.replace(R.id.chatting_room_footer_bottom_menu, getFragment()).commitAllowingStateLoss();
+            } else {
+                transaction.remove(getFragment()).commitAllowingStateLoss();
+            }
+
+        }
+
+        /**
+         * Deactivate all menus
+         */
+        public static void removeAllMenu(FragmentTransaction transaction) {
+
+            if (transaction == null)
+                return;
+
+            for (Buttons button : values()) {
+                if (button.isOn()){
+                    transaction.remove(button.getFragment()).commitAllowingStateLoss();
+                }
+            }
+        }
+
+        /**
+         * Check if any of menu is activated
+         */
+        public static boolean isAnyMenuActivated() {
+            for (Buttons button : values()) {
+                if (button.isOn()){
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 
 }
