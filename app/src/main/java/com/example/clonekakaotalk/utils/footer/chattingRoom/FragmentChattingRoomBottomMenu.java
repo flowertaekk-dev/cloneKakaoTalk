@@ -73,6 +73,4 @@ public class FragmentChattingRoomBottomMenu extends Fragment {
         return param;
     }
 
-
-
 }

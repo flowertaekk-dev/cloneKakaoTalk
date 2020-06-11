@@ -12,33 +12,4 @@
         android:orientation="vertical"
         android:id="@+id/chatting_room_bottom_menu_container" />
 
-<!--        <ImageButton-->
-<!--            android:layout_width="?actionBarSize"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:src="@drawable/fragment_more_icon"-->
-<!--            android:layout_weight="1"-->
-<!--            android:id="@+id/test1"/>-->
-
-<!--        <ImageButton-->
-<!--            android:layout_width="?actionBarSize"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:src="@drawable/fragment_more_icon"-->
-<!--            android:layout_weight="1"-->
-<!--            android:id="@+id/test2"/>-->
-
-<!--        <ImageButton-->
-<!--            android:layout_width="?actionBarSize"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:src="@drawable/fragment_more_icon"-->
-<!--            android:layout_weight="1"-->
-<!--            android:id="@+id/test3"/>-->
-
-<!--        <ImageButton-->
-<!--            android:layout_width="?actionBarSize"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:src="@drawable/fragment_more_icon"-->
-<!--            android:layout_weight="1"-->
-<!--            android:id="@+id/test4"/>-->
-<!--    </LinearLayout>-->
-
 </FrameLayout>
