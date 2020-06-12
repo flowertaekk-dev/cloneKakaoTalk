@@ -10,6 +10,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/chatting_room_emoticon_menu_container" />
+        android:id="@+id/fragment_chatting_room_emoticon_menu">
+
+        <!--  EMOTICON SCROLL VIEW MENU  -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:id="@+id/chatting_room_emoticon_scroll_menu_container">
+
+            <HorizontalScrollView
+                android:id="@+id/chatting_room_emoticon_categories_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:layout_toStartOf="@+id/chatting_room_emoticon_shop_btn">
+
+                <LinearLayout
+                    android:id="@+id/chatting_room_emoticon_categories_inner_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
+
+            <ImageButton
+                android:id="@+id/chatting_room_emoticon_shop_btn"
+                android:layout_width="?actionBarSize"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/custom_left_border"
+                android:contentDescription="Go to Emoticon shop button"
+                android:src="@drawable/ic_shop" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/chatting_room_emoticon_menu_container" />
+
+    </LinearLayout>
 
 </FrameLayout>

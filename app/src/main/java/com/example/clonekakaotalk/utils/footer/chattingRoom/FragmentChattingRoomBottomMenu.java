@@ -1,7 +1,6 @@
 package com.example.clonekakaotalk.utils.footer.chattingRoom;
 
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,7 @@ public class FragmentChattingRoomBottomMenu extends Fragment {
                     imageButton.setImageResource(R.drawable.fragment_chatting_list_icon);
                 }
 
-                imageButton.setLayoutParams(getParamForImageButton());
+                imageButton.setLayoutParams(ChattingRoomMenuUtil.getParamForImageButton(getResources()));
 
                 linearLayout.addView(imageButton);
             }
@@ -57,20 +56,5 @@ public class FragmentChattingRoomBottomMenu extends Fragment {
 
     // ---------------------------------------------------------------------------------------------
     // BOTTOM MENU
-
-    /**
-     * Return param for ImageButton for bottom menu
-     */
-    private LinearLayout.LayoutParams getParamForImageButton() {
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        param.weight = 1;
-        param.width = R.attr.actionBarSize;
-
-        // set height in dp
-        int iconHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-        param.height = iconHeight;
-
-        return param;
-    }
 
 }

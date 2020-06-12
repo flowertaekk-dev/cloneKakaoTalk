@@ -87,7 +87,7 @@
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:baselineAligned="false"
-        android:background="@drawable/custom_border">
+        android:background="@drawable/custom_upper_border">
 
         <!-- FREE CHAT -->
         <LinearLayout

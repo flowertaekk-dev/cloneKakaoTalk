@@ -1,7 +1,6 @@
 package com.example.clonekakaotalk.utils.footer.chattingRoom;
 
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +23,22 @@ public class FragmentChattingRoomEmoticonMenu extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View emoticonMenuView = inflater.inflate(R.layout.fragment_chatting_room_emoticon_menu, container, false);
 
+        _initEmoticonCategories(emoticonMenuView);
+        _iniCurrentEmoticon(emoticonMenuView);
+
+        return emoticonMenuView;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // INIT
+
+    private void _iniCurrentEmoticon(View emoticonMenuView) {
         // retrieve container layout
-        LinearLayout parent = emoticonMenuView.findViewById(R.id.chatting_room_emoticon_menu_container);
+        LinearLayout container = emoticonMenuView.findViewById(R.id.chatting_room_emoticon_menu_container);
 
         // create two lines for emoticon as dummy
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout emoticonRow = new LinearLayout(getContext());
+        emoticonRow.setOrientation(LinearLayout.HORIZONTAL);
 
         for (int j=0; j<4; j++) {
             ImageButton imageButton = new ImageButton(getContext());
@@ -37,29 +46,27 @@ public class FragmentChattingRoomEmoticonMenu extends Fragment {
 
             imageButton.setImageResource(R.drawable.fragment_chatting_list_icon);
 
-            imageButton.setLayoutParams(getParamForImageButton());
+            imageButton.setLayoutParams(ChattingRoomMenuUtil.getParamForImageButton(getResources()));
 
-            linearLayout.addView(imageButton);
+            emoticonRow.addView(imageButton);
         }
 
-        parent.addView(linearLayout);
-
-        return emoticonMenuView;
+        container.addView(emoticonRow);
     }
 
-    /**
-     * Return param for ImageButton for bottom menu
-     * TODO DRY!!!!!!!!!!!!!!!!!!!!!!!!
-     */
-    private LinearLayout.LayoutParams getParamForImageButton() {
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        param.weight = 1;
-        param.width = R.attr.actionBarSize;
+    private void _initEmoticonCategories(View emoticonMenuView) {
+        // retrieve container view
+        LinearLayout container = emoticonMenuView.findViewById(R.id.chatting_room_emoticon_categories_inner_container);
 
-        // set height in dp
-        int iconHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90, getResources().getDisplayMetrics());
-        param.height = iconHeight;
+        // create dummy for now. ;D
+        for (int i=0; i<10; i++) {
+            ImageButton imageButton = new ImageButton(getContext());
+            imageButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-        return param;
+            imageButton.setImageResource(R.drawable.fragment_chatting_list_icon);
+
+            container.addView(imageButton);
+        }
+
     }
 }
