@@ -205,6 +205,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
             for (Buttons button : values()) {
                 if (button.isOn()){
                     transaction.remove(button.getFragment()).commitAllowingStateLoss();
+                    button.setButtonStatus(false);
                 }
             }
         }
