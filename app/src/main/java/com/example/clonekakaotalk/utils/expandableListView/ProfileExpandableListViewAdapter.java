@@ -51,6 +51,7 @@ public class ProfileExpandableListViewAdapter extends BaseExpandableListAdapter 
             convertView = layoutInflater.inflate(R.layout.list_item, null);
         }
 
+        // TODO DRY!!!!
         TextView textViewNickName = convertView.findViewById(R.id.my_nickname);
         textViewNickName.setText(profile.getNickname());
 

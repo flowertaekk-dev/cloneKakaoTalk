@@ -1,5 +1,6 @@
 package com.example.clonekakaotalk.utils.footer;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Build;
@@ -11,14 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.clonekakaotalk.ProfileDetailActivity;
 import com.example.clonekakaotalk.R;
 import com.example.clonekakaotalk.domain.Profile;
+import com.example.clonekakaotalk.utils.defs.ParcelKeys;
 import com.example.clonekakaotalk.utils.expandableListView.ProfileExpandableListViewAdapter;
 
 import java.util.ArrayList;
@@ -43,12 +47,45 @@ public class FragmentFriendsList extends Fragment {
         TextView headerTitleView = friendsListView.findViewById(R.id.header_title);
         FooterFragment.FRIENDS_LIST.setTitleOnHeader(headerTitleView);
 
+        // init my profile
+        _initializeMyProfile(friendsListView);
+
         // get Friends list view
         _profileExpandableListView = friendsListView.findViewById(R.id.friends_list);
 
         _initializeFriendsList(friendsListView);
 
         return friendsListView;
+    }
+
+    /**
+     * Initialize my profile
+     */
+    private void _initializeMyProfile(View friendsListView) {
+
+        // create dummy for now
+        Profile profile = Profile.builder()
+                .nickname(";")
+                .profileName("Code Poet")
+                .build();
+
+        TextView textViewNickName = friendsListView.findViewById(R.id.my_nickname);
+        textViewNickName.setText(profile.getNickname());
+
+        TextView textViewProfileName = friendsListView.findViewById(R.id.my_profile_name);
+        textViewProfileName.setText(profile.getProfileName());
+
+        // setOnClickListener event
+        LinearLayout profileContainer = friendsListView.findViewById(R.id.friends_list_my_profile);
+        profileContainer.setOnClickListener(new ExpandableListView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ProfileDetailActivity.class);
+                intent.putExtra(ParcelKeys.CURRENT_SELECTED_PROFILE.name(), profile);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                getContext().startActivity(intent);
+            }
+        });
     }
 
     /**
