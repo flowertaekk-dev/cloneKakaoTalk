@@ -12,7 +12,24 @@ public class WindowSoft {
      */
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        if (imm == null) {
+            throw new RuntimeException("Problem with handling keyboard");
+        }
+
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
     }
 
+    /**
+     * Show default Android keyboard
+     */
+    public static void showKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        if (imm == null) {
+            throw new RuntimeException("Problem with handling keyboard");
+        }
+        imm.showSoftInput(view, 0);
+    }
 }

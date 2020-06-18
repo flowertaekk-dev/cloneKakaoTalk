@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -17,6 +16,8 @@ import com.example.clonekakaotalk.utils.defs.ParcelKeys;
 import com.example.clonekakaotalk.utils.defs.Transport;
 import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoomBottomMenu;
 import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoomEmoticonMenu;
+import com.example.clonekakaotalk.utils.footer.chattingRoom.HashTagSearchEditText;
+import com.example.clonekakaotalk.utils.footer.chattingRoom.SharedChattingRoomViewData;
 import com.example.clonekakaotalk.utils.windowSoftware.WindowSoft;
 
 import lombok.Getter;
@@ -26,7 +27,10 @@ public class ChattingRoomActivity extends AppCompatActivity {
     // Init
     private Profile _selectedProfile;
     private ImageButton _chattingRoomFooterMenuBtn;
-    private EditText _chattingInputEditText;
+    private ImageButton _chattingRoomEmoticonMenuBtn;
+    private ImageButton _searchWithHashTagBtn;
+    private ImageButton _hashTagIcon;
+    private HashTagSearchEditText _chattingInputEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +38,24 @@ public class ChattingRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chatting_room);
 
         // init
+        _chattingRoomFooterMenuBtn = findViewById(R.id.chatting_room_footer_menu_btn);
+        _chattingRoomEmoticonMenuBtn = findViewById(R.id.chatting_room_footer_emoticon_btn);
+        _searchWithHashTagBtn = findViewById(R.id.chatting_room_footer_search_with_hashtag_btn);
+        _chattingInputEditText = findViewById(R.id.chatting_room_footer_chatting_input);
+        _hashTagIcon = findViewById(R.id.chatting_room_footer_hashtag_icon);
+
         Intent intent = getIntent();
         _initProfileFromParcel(intent);
 
         _initChattingMenuButtonClicked();
         _initEmoticonMenuButtonClicked();
-
+        _initSearchWithHashTagButtonClicked();
         _initChattingInputEditText();
+
+        // set some views to share with other class
+        SharedChattingRoomViewData.setChattingRoomEmoticonMenuBtn(_chattingRoomEmoticonMenuBtn);
+        SharedChattingRoomViewData.setHashTagIcon(_hashTagIcon);
+        SharedChattingRoomViewData.setSearchWithHashTagBtn(_searchWithHashTagBtn);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -88,8 +103,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
      * Slide up and down the Chatting menu
      */
     private void _initChattingMenuButtonClicked() {
-        _chattingRoomFooterMenuBtn = findViewById(R.id.chatting_room_footer_menu_btn);
-        _chattingRoomFooterMenuBtn.setOnClickListener(new View.OnClickListener() {
+        this._chattingRoomFooterMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 WindowSoft.hideKeyboardFrom(getApplicationContext(), _chattingInputEditText);
@@ -102,8 +116,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
      * Slide up and down the Emoticon menu
      */
     private void _initEmoticonMenuButtonClicked() {
-        _chattingRoomFooterMenuBtn = findViewById(R.id.chatting_room_footer_emoticon_btn);
-        _chattingRoomFooterMenuBtn.setOnClickListener(new View.OnClickListener() {
+        this._chattingRoomEmoticonMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 WindowSoft.hideKeyboardFrom(getApplicationContext(), _chattingInputEditText);
@@ -112,14 +125,36 @@ public class ChattingRoomActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Open Hash tag search block.
+     */
+    private void _initSearchWithHashTagButtonClicked() {
+        this._searchWithHashTagBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Buttons.removeAllMenu(getSupportFragmentManager().beginTransaction());
+
+                SharedChattingRoomViewData.setSearchWithHashOnFlag(true);
+
+                // hide emoticon and hash tag btn
+                _chattingRoomEmoticonMenuBtn.setVisibility(View.GONE);
+                _searchWithHashTagBtn.setVisibility(View.GONE);
+
+                // show hash tag icon in front of Edittext
+                _hashTagIcon.setVisibility(View.VISIBLE);
+
+                // request focus
+                _chattingInputEditText.requestFocus();
+                WindowSoft.showKeyboardFrom(getApplicationContext(), _chattingInputEditText);
+            }
+        });
+    }
 
     // ---------------------------------------------------------------------------------------------
     // OnTouchListener
 
     private void _initChattingInputEditText() {
-        _chattingInputEditText = findViewById(R.id.chatting_room_footer_chatting_input);
-
-        _chattingInputEditText.setOnTouchListener(new View.OnTouchListener() {
+        this._chattingInputEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // remove BottomMenu
@@ -130,7 +165,11 @@ public class ChattingRoomActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // TODO add OnbackPressed event listener when EditText has focus
     }
+
+
 
     // ---------------------------------------------------------------------------------------------
     // UTIL
@@ -139,6 +178,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
     private enum Buttons {
         BOTTOM_MENU_BUTTON (false, new FragmentChattingRoomBottomMenu()),
         EMOTICON_MENU_BUTTON (false, new FragmentChattingRoomEmoticonMenu()),
+        // SEARCH_WITH_HASH_BUTTON (false, null), // It is not working with Fragment
         ;
 
         private boolean isOn;           // isClicked?
@@ -181,7 +221,8 @@ public class ChattingRoomActivity extends AppCompatActivity {
         }
 
         /**
-         * Activate and deactivate menus
+         * Activate and deactivate menus <br />
+         * It is only work with Fragment
          */
         public void showAndRemoveMenuByClickingButton(FragmentTransaction transaction) {
             updateButtonStatus();
