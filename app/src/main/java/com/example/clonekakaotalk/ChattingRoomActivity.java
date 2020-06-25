@@ -2,12 +2,16 @@ package com.example.clonekakaotalk;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -31,6 +35,9 @@ public class ChattingRoomActivity extends AppCompatActivity {
     private ImageButton _searchWithHashTagBtn;
     private ImageButton _hashTagIcon;
     private HashTagSearchEditText _chattingInputEditText;
+    private DrawerLayout _mainLayout;
+    private View _sideBarMenu;
+    private ImageButton _sideBarBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,9 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _searchWithHashTagBtn = findViewById(R.id.chatting_room_footer_search_with_hashtag_btn);
         _chattingInputEditText = findViewById(R.id.chatting_room_footer_chatting_input);
         _hashTagIcon = findViewById(R.id.chatting_room_footer_hashtag_icon);
+        _mainLayout = findViewById(R.id.chatting_room_main_container);
+        _sideBarMenu = findViewById(R.id.chatting_room_side_drawer_layout);
+        _sideBarBtn = findViewById(R.id.chatting_room_side_bar_btn);
 
         Intent intent = getIntent();
         _initProfileFromParcel(intent);
@@ -51,6 +61,8 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _initEmoticonMenuButtonClicked();
         _initSearchWithHashTagButtonClicked();
         _initChattingInputEditText();
+        _initSideBarBtn();
+        _initSideBar();
 
         // set some views to share with other class
         SharedChattingRoomViewData.setChattingRoomEmoticonMenuBtn(_chattingRoomEmoticonMenuBtn);
@@ -168,6 +180,48 @@ public class ChattingRoomActivity extends AppCompatActivity {
 
         // TODO add OnbackPressed event listener when EditText has focus
     }
+
+    // ---------------------------------------------------------------------------------------------
+    // SIDE BAR LISTENER
+
+    private void _initSideBarBtn() {
+        _sideBarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _mainLayout.openDrawer(Gravity.RIGHT);
+            }
+        });
+    }
+
+    private void _initSideBar() {
+        _mainLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                Toast.makeText(getApplicationContext(), "OPENED", Toast.LENGTH_SHORT).show();
+                // TODO need to handle android keyboard
+                // TODO need to handle edittext & hash search
+                Buttons.removeAllMenu(getSupportFragmentManager().beginTransaction());
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
+    }
+
+
 
 
 
