@@ -3,8 +3,8 @@ package com.example.clonekakaotalk.utils.footer.chattingRoom;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.ImageButton;
+
+import com.example.clonekakaotalk.ChattingRoomActivity;
 
 public class HashTagSearchEditText extends androidx.appcompat.widget.AppCompatEditText {
 
@@ -16,20 +16,9 @@ public class HashTagSearchEditText extends androidx.appcompat.widget.AppCompatEd
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (SharedChattingRoomViewData.isSearchWithHashOn()) {
-
-                ImageButton chattingRoomEmoticonMenuBtn = SharedChattingRoomViewData.chattingRoomEmoticonMenuBtn();
-                ImageButton searchWithHashTagBtn = SharedChattingRoomViewData.searchWithHashTagBtn();
-                ImageButton hashTagIcon = SharedChattingRoomViewData.hashTagIcon();
-
-                // show emoticon and hash tag btn
-                chattingRoomEmoticonMenuBtn.setVisibility(View.VISIBLE);
-                searchWithHashTagBtn.setVisibility(View.VISIBLE);
-
-                // hide hash tag icon in front of Edittext
-                hashTagIcon.setVisibility(View.GONE);
-
+                ChattingRoomActivity.ObjectStorage.switchHashTagSearchMode(false);
                 SharedChattingRoomViewData.setSearchWithHashOnFlag(false);
-                return true;
+                return false;
             }
         }
 

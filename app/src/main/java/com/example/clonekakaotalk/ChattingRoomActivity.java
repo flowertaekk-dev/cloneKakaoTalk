@@ -1,18 +1,19 @@
 package com.example.clonekakaotalk;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.clonekakaotalk.domain.Profile;
@@ -36,7 +37,6 @@ public class ChattingRoomActivity extends AppCompatActivity {
     private ImageButton _hashTagIcon;
     private HashTagSearchEditText _chattingInputEditText;
     private DrawerLayout _mainLayout;
-    private View _sideBarMenu;
     private ImageButton _sideBarBtn;
 
     @Override
@@ -51,8 +51,15 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _chattingInputEditText = findViewById(R.id.chatting_room_footer_chatting_input);
         _hashTagIcon = findViewById(R.id.chatting_room_footer_hashtag_icon);
         _mainLayout = findViewById(R.id.chatting_room_main_container);
-        _sideBarMenu = findViewById(R.id.chatting_room_side_drawer_layout);
         _sideBarBtn = findViewById(R.id.chatting_room_side_bar_btn);
+
+        ObjectStorage.setContext(getApplicationContext());
+        ObjectStorage.setFragmentManager(getSupportFragmentManager());
+        ObjectStorage.setDrawerLayout(_mainLayout);
+        ObjectStorage.setChattingInputEditText(_chattingInputEditText);
+        ObjectStorage.setChattingRoomEmoticonMenuBtn(_chattingRoomEmoticonMenuBtn);
+        ObjectStorage.setSearchWithHashTagBtn(_searchWithHashTagBtn);
+        ObjectStorage.setHashTagIcon(_hashTagIcon);
 
         Intent intent = getIntent();
         _initProfileFromParcel(intent);
@@ -64,10 +71,6 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _initSideBarBtn();
         _initSideBar();
 
-        // set some views to share with other class
-        SharedChattingRoomViewData.setChattingRoomEmoticonMenuBtn(_chattingRoomEmoticonMenuBtn);
-        SharedChattingRoomViewData.setHashTagIcon(_hashTagIcon);
-        SharedChattingRoomViewData.setSearchWithHashTagBtn(_searchWithHashTagBtn);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -101,7 +104,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
 
         // remove BottomMenu
         if (Buttons.isAnyMenuActivated()) {
-            Buttons.removeAllMenu(getSupportFragmentManager().beginTransaction());
+            Buttons.removeAllMenu(ObjectStorage.fragmentTransaction());
             return;
         }
 
@@ -118,8 +121,11 @@ public class ChattingRoomActivity extends AppCompatActivity {
         this._chattingRoomFooterMenuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SharedChattingRoomViewData.isSearchWithHashOn()) {
+                    ObjectStorage.switchHashTagSearchMode(false);
+                }
                 WindowSoft.hideKeyboardFrom(getApplicationContext(), _chattingInputEditText);
-                Buttons.BOTTOM_MENU_BUTTON.showAndRemoveMenuByClickingButton(getSupportFragmentManager().beginTransaction());
+                Buttons.BOTTOM_MENU_BUTTON.showAndRemoveMenuByClickingButton();
             }
         });
     }
@@ -132,7 +138,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 WindowSoft.hideKeyboardFrom(getApplicationContext(), _chattingInputEditText);
-                Buttons.EMOTICON_MENU_BUTTON.showAndRemoveMenuByClickingButton(getSupportFragmentManager().beginTransaction());
+                Buttons.EMOTICON_MENU_BUTTON.showAndRemoveMenuByClickingButton();
             }
         });
     }
@@ -144,16 +150,10 @@ public class ChattingRoomActivity extends AppCompatActivity {
         this._searchWithHashTagBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Buttons.removeAllMenu(getSupportFragmentManager().beginTransaction());
+                Buttons.removeAllMenu(ObjectStorage.fragmentTransaction());
 
                 SharedChattingRoomViewData.setSearchWithHashOnFlag(true);
-
-                // hide emoticon and hash tag btn
-                _chattingRoomEmoticonMenuBtn.setVisibility(View.GONE);
-                _searchWithHashTagBtn.setVisibility(View.GONE);
-
-                // show hash tag icon in front of Edittext
-                _hashTagIcon.setVisibility(View.VISIBLE);
+                ObjectStorage.switchHashTagSearchMode(true);
 
                 // request focus
                 _chattingInputEditText.requestFocus();
@@ -171,14 +171,12 @@ public class ChattingRoomActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 // remove BottomMenu
                 if (Buttons.isAnyMenuActivated()) {
-                    Buttons.removeAllMenu(getSupportFragmentManager().beginTransaction());
+                    Buttons.removeAllMenu(ObjectStorage.fragmentTransaction());
                     _chattingInputEditText.requestFocus();
                 }
                 return false;
             }
         });
-
-        // TODO add OnbackPressed event listener when EditText has focus
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -188,51 +186,140 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _sideBarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _mainLayout.openDrawer(Gravity.RIGHT);
+               Buttons.SIDE_BAR_BUTTON.showAndRemoveMenuByClickingButton();
             }
         });
     }
 
     private void _initSideBar() {
-        _mainLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-                Toast.makeText(getApplicationContext(), "OPENED", Toast.LENGTH_SHORT).show();
-                // TODO need to handle android keyboard
-                // TODO need to handle edittext & hash search
-                Buttons.removeAllMenu(getSupportFragmentManager().beginTransaction());
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-
+        // to stop opening by swipe
+        _mainLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
-
-
-
-
 
     // ---------------------------------------------------------------------------------------------
     // UTIL
 
+    /**
+     * ObjectStorage for handling buttons in ChattingRoom
+     */
+    public static class ObjectStorage {
+        private static Context _applicationContext;
+        private static FragmentManager _fragmentManager;
+        private static DrawerLayout _mainLayout;
+        private static EditText _chattingInputEditText;
+        private static ImageButton _chattingRoomEmoticonMenuBtn;
+        private static ImageButton _searchWithHashTagBtn;
+        private static ImageButton _hashTagIcon;
+
+        private static void setContext(Context context) {
+            _applicationContext = context;
+        }
+        public static Context applicationContext() {
+            return _applicationContext;
+        }
+
+        private static void setFragmentManager(FragmentManager fragmentManager) {
+            _fragmentManager = fragmentManager;
+        }
+        public static FragmentTransaction fragmentTransaction() {
+            return _fragmentManager.beginTransaction();
+        }
+
+        private static void setDrawerLayout(DrawerLayout drawerLayout) {
+            _mainLayout = drawerLayout;
+        }
+        public static DrawerLayout mainLayout() {
+            return _mainLayout;
+        }
+
+        private static void setChattingInputEditText(EditText chattingInputEditText) {
+            _chattingInputEditText = chattingInputEditText;
+        }
+        public static EditText chattingInputEditText() {
+            return _chattingInputEditText;
+        }
+
+        private static void setChattingRoomEmoticonMenuBtn(ImageButton chattingRoomEmoticonMenuBtn) {
+            _chattingRoomEmoticonMenuBtn = chattingRoomEmoticonMenuBtn;
+        }
+        public static ImageButton ChattingRoomEmoticonMenuBtn() {
+            return _chattingRoomEmoticonMenuBtn;
+        }
+
+        private static void setSearchWithHashTagBtn(ImageButton searchWithHashTagBtn) {
+            _searchWithHashTagBtn = searchWithHashTagBtn;
+        }
+        public static ImageButton searchWithHashTagBtn() {
+            return _searchWithHashTagBtn;
+        }
+
+        private static void setHashTagIcon(ImageButton hashTagIcon) {
+            _hashTagIcon = hashTagIcon;
+        }
+        public static ImageButton hashTagIcon() {
+            return _hashTagIcon;
+        }
+
+        public static void switchHashTagSearchMode(boolean isOn) {
+            if (isOn) {
+                // hide emoticon and hash tag btn
+                _chattingRoomEmoticonMenuBtn.setVisibility(View.GONE);
+                _searchWithHashTagBtn.setVisibility(View.GONE);
+
+                // show hash tag icon in front of Edittext
+                _hashTagIcon.setVisibility(View.VISIBLE);
+            } else {
+                _chattingRoomEmoticonMenuBtn.setVisibility(View.VISIBLE);
+                _searchWithHashTagBtn.setVisibility(View.VISIBLE);
+
+                _hashTagIcon.setVisibility(View.GONE);
+            }
+        }
+    }
+
     @Getter
     private enum Buttons {
-        BOTTOM_MENU_BUTTON (false, new FragmentChattingRoomBottomMenu()),
-        EMOTICON_MENU_BUTTON (false, new FragmentChattingRoomEmoticonMenu()),
-        // SEARCH_WITH_HASH_BUTTON (false, null), // It is not working with Fragment
+        BOTTOM_MENU_BUTTON (false, new FragmentChattingRoomBottomMenu()) {
+            @Override
+            public void showAndRemoveMenuByClickingButton() {
+                updateButtonStatus(this);
+                FragmentTransaction transaction = ObjectStorage.fragmentTransaction();
+
+                if (isOn()) {
+                    transaction.replace(R.id.chatting_room_footer_bottom_menu, getFragment()).commitAllowingStateLoss();
+                } else {
+                    transaction.remove(getFragment()).commitAllowingStateLoss();
+                }
+            }
+        },
+        EMOTICON_MENU_BUTTON (false, new FragmentChattingRoomEmoticonMenu()) {
+            @Override
+            public void showAndRemoveMenuByClickingButton() {
+                updateButtonStatus(this);
+                FragmentTransaction transaction = ObjectStorage.fragmentTransaction();
+
+                if (isOn()) {
+                    transaction.replace(R.id.chatting_room_footer_bottom_menu, getFragment()).commitAllowingStateLoss();
+                } else {
+                    transaction.remove(getFragment()).commitAllowingStateLoss();
+                }
+            }
+        },
+        // SEARCH_WITH_HASH_BUTTON (false, null), It's not handling Fragment
+        SIDE_BAR_BUTTON(false, null) {
+            @Override
+            void showAndRemoveMenuByClickingButton() {
+                // updateButtonStatus(this); // it doesn't seem to work..?
+                SharedChattingRoomViewData.setSideBarOn(true);
+
+                if (SharedChattingRoomViewData.isSearchWithHashOn()) {
+                    ObjectStorage.switchHashTagSearchMode(false);
+                }
+                WindowSoft.hideKeyboardFrom(ObjectStorage.applicationContext(), ObjectStorage.chattingInputEditText());
+                Buttons.removeAllMenu(ObjectStorage.fragmentTransaction());
+                ObjectStorage.mainLayout().openDrawer(Gravity.RIGHT);
+            }
+        }
         ;
 
         private boolean isOn;           // isClicked?
@@ -247,6 +334,12 @@ public class ChattingRoomActivity extends AppCompatActivity {
         }
 
         /**
+         * Activate and deactivate menus <br />
+         * It is only work with Fragment
+         */
+        abstract void showAndRemoveMenuByClickingButton();
+
+        /**
          * Update buttons' status <br />
          *
          * <ul>
@@ -254,39 +347,17 @@ public class ChattingRoomActivity extends AppCompatActivity {
          *     <li>other buttons -> OFF</li>
          * </ul>
          */
-        private void updateButtonStatus() {
-
-            // If the same button clicked
-            if (isOn()) {
-                setButtonStatus(false);
-                return;
-            }
-
+        private static void updateButtonStatus(Buttons self) {
             for (Buttons button : Buttons.values()) {
                 // update clicked button to On
-                if (button == this) {
-                    setButtonStatus(true);
+                if (button == self) {
+                    button.setButtonStatus(true);
                     continue;
                 }
 
                 // set others to false
                 button.setButtonStatus(false);
             }
-        }
-
-        /**
-         * Activate and deactivate menus <br />
-         * It is only work with Fragment
-         */
-        public void showAndRemoveMenuByClickingButton(FragmentTransaction transaction) {
-            updateButtonStatus();
-
-            if (isOn()) {
-                transaction.replace(R.id.chatting_room_footer_bottom_menu, getFragment()).commitAllowingStateLoss();
-            } else {
-                transaction.remove(getFragment()).commitAllowingStateLoss();
-            }
-
         }
 
         /**
@@ -297,8 +368,12 @@ public class ChattingRoomActivity extends AppCompatActivity {
             if (transaction == null)
                 return;
 
+            if (SharedChattingRoomViewData.isSideBarOn()) {
+                ObjectStorage.mainLayout().closeDrawer(Gravity.RIGHT);
+            }
+
             for (Buttons button : values()) {
-                if (button.isOn()){
+                if (button.isOn()) {
                     transaction.remove(button.getFragment()).commitAllowingStateLoss();
                     button.setButtonStatus(false);
                 }
@@ -309,6 +384,11 @@ public class ChattingRoomActivity extends AppCompatActivity {
          * Check if any of menu is activated
          */
         public static boolean isAnyMenuActivated() {
+
+            if (SharedChattingRoomViewData.isOn()) {
+                return true;
+            }
+
             for (Buttons button : values()) {
                 if (button.isOn()){
                     return true;
