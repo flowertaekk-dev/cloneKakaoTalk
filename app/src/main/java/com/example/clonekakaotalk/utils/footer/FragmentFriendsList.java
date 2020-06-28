@@ -23,7 +23,7 @@ import com.example.clonekakaotalk.ProfileDetailActivity;
 import com.example.clonekakaotalk.R;
 import com.example.clonekakaotalk.domain.Profile;
 import com.example.clonekakaotalk.utils.defs.ParcelKeys;
-import com.example.clonekakaotalk.utils.expandableListView.ProfileExpandableListViewAdapter;
+import com.example.clonekakaotalk.utils.listViewAdapter.ProfileExpandableListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;

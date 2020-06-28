@@ -1,4 +1,4 @@
-package com.example.clonekakaotalk.utils.expandableListView;
+package com.example.clonekakaotalk.utils.listViewAdapter;
 
 import android.content.Context;
 import android.content.Intent;

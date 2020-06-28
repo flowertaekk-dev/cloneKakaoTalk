@@ -2,12 +2,12 @@ package com.example.clonekakaotalk.utils.sqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class ChattingDatabaseManager {
     private final String DB_NAME = "chatting"; // It will be only used in chatting room for now.
-    private final String TABLE_NAME = "chatting_room";
-    private final int DB_VERSION = 1;
+    private final String TABLE_NAME = "chattingRoom";
 
     private Context _currentContext;
     private SQLiteDatabase _sqLiteDatabase;
@@ -21,7 +21,7 @@ public class ChattingDatabaseManager {
         _sqLiteDatabase.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NAME
                 + "(seq INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "user_name TEXT,"
+                + "username TEXT,"
                 + "message TEXT);"
         );
     }
@@ -39,7 +39,17 @@ public class ChattingDatabaseManager {
     // CRUD
 
     public long insert(ContentValues addRowValue) {
-        return _sqLiteDatabase.insert(DB_NAME, null, addRowValue);
+        return _sqLiteDatabase.insert(TABLE_NAME, null, addRowValue);
+    }
+
+    public Cursor query(String[] columns, String groupBy, String having, String orderBy) {
+        return _sqLiteDatabase.query(TABLE_NAME,
+                columns,
+                null,
+                null,
+                groupBy,
+                having,
+                orderBy);
     }
 
 }

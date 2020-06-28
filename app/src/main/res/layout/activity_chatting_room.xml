@@ -70,6 +70,9 @@
             android:id="@+id/chatting_room_chatting"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:divider="@color/colorTransparent"
+            android:dividerHeight="0dp"
+            android:transcriptMode="alwaysScroll"
             android:layout_below="@+id/chatting_room_header_container"
             android:layout_above="@+id/chatting_room_footer_container" />
 

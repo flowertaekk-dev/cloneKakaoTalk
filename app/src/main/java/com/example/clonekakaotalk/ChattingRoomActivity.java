@@ -3,6 +3,7 @@ package com.example.clonekakaotalk;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,8 +28,12 @@ import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoom
 import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoomEmoticonMenu;
 import com.example.clonekakaotalk.utils.footer.chattingRoom.HashTagSearchEditText;
 import com.example.clonekakaotalk.utils.footer.chattingRoom.SharedChattingRoomViewData;
+import com.example.clonekakaotalk.utils.listViewAdapter.ChatListViewAdapter;
 import com.example.clonekakaotalk.utils.sqlite.ChattingDatabaseManager;
 import com.example.clonekakaotalk.utils.windowSoftware.WindowSoft;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Getter;
 
@@ -43,8 +49,11 @@ public class ChattingRoomActivity extends AppCompatActivity {
     private HashTagSearchEditText _chattingInputEditText;
     private DrawerLayout _mainLayout;
     private ImageButton _sideBarBtn;
+    private ListView _chattingList;
 
     private ChattingDatabaseManager _chattingDatabaseManager;
+    private List<Chat> _chatList;
+    private ChatListViewAdapter _chattingListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +76,8 @@ public class ChattingRoomActivity extends AppCompatActivity {
 
         // Database
         this._chattingDatabaseManager = ChattingDatabaseManager.getInstance(this);
+
+        initializeChattingList();
 
     }
 
@@ -105,6 +116,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _mainLayout = findViewById(R.id.chatting_room_main_container);
         _sideBarBtn = findViewById(R.id.chatting_room_side_bar_btn);
 
+
         ChattingObjectStorage.setContext(getApplicationContext());
         ChattingObjectStorage.setFragmentManager(getSupportFragmentManager());
         ChattingObjectStorage.setDrawerLayout(_mainLayout);
@@ -112,6 +124,31 @@ public class ChattingRoomActivity extends AppCompatActivity {
         ChattingObjectStorage.setChattingRoomEmoticonMenuBtn(_chattingRoomEmoticonMenuBtn);
         ChattingObjectStorage.setSearchWithHashTagBtn(_searchWithHashTagBtn);
         ChattingObjectStorage.setHashTagIcon(_hashTagIcon);
+    }
+
+    /**
+     * Initialize chattingRoom <br />
+     * Because chatting room need to be set with data, it is handled separately.
+     */
+    private void initializeChattingList() {
+        _chattingList = findViewById(R.id.chatting_room_chatting);
+        _chatList = new ArrayList<>();
+
+        String [] columns = {"username", "message"};
+
+        Cursor cursor = _chattingDatabaseManager.query(columns, null, null, null);
+
+        if(cursor != null) {
+            while (cursor.moveToNext()) {
+                _chatList.add(
+                        new Chat(
+                                cursor.getString(0),
+                                cursor.getString(1)));
+            }
+        }
+
+        _chattingListAdapter = new ChatListViewAdapter(getLayoutInflater(), _chatList);
+        _chattingList.setAdapter(_chattingListAdapter);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -188,12 +225,31 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _sendMessageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContentValues addMessage = new ContentValues();
+                String nickname = _selectedProfile.getNickname();
+                String message = _chattingInputEditText.getText().toString();
 
-                addMessage.put("user_name", _selectedProfile.getNickname());
-                addMessage.put("message", _chattingInputEditText.getText().toString());
+                // save message
+                updateChatting(nickname, message);
 
-                _chattingDatabaseManager.insert(addMessage);
+                // dummy for fun
+                switch (message) {
+                    case "야":
+                        updateChatting("friend", "호");
+                        break;
+                    case "너":
+                    case "용":
+                        updateChatting("friend", "구리");
+                        break;
+                    case "hello":
+                        updateChatting("android", "world");
+                        break;
+                    default:
+                        // do nothing
+                        break;
+                }
+
+                // init input(EditText)
+                _chattingInputEditText.setText("");
             }
         });
     }
@@ -260,6 +316,22 @@ public class ChattingRoomActivity extends AppCompatActivity {
 
     // ---------------------------------------------------------------------------------------------
     // UTIL
+
+    /**
+     * Update Chatting
+     */
+    private void updateChatting(String nickname, String message) {
+        ContentValues addMessage = new ContentValues();
+
+        addMessage.put("username", nickname);
+        addMessage.put("message", message);
+
+        _chattingDatabaseManager.insert(addMessage);
+        _chatList.add(new Chat(nickname, message));
+
+        // update list
+        _chattingListAdapter.notifyDataSetChanged();
+    }
 
     /**
      * ObjectStorage for handling buttons in ChattingRoom
@@ -459,6 +531,27 @@ public class ChattingRoomActivity extends AppCompatActivity {
             return false;
         }
 
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // CHATTING
+
+    public class Chat {
+        private String _nickName;
+        private String _message;
+
+        private Chat(String nickName, String message) {
+            this._nickName = nickName;
+            this._message = message;
+        }
+
+        public String getNickName() {
+            return _nickName;
+        }
+
+        public String getMessage() {
+            return _message;
+        }
     }
 
 }

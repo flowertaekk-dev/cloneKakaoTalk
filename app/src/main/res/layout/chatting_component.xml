@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/chatting_component_picture"
+        android:layout_width="?actionBarSize"
+        android:layout_height="?actionBarSize"
+        android:src="@drawable/ic_launcher_foreground" />
+
+    <LinearLayout
+        android:id="@+id/chatting_component_container"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/chatting_component_picture"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/chatting_component_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="bottom"/>
+
+        <TextView
+            android:id="@+id/chatting_component_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:background="@color/colorWhite"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/my_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="right"
+        android:textSize="20dp"
+        android:background="@color/colorYellow" />
+
+
+</RelativeLayout>
