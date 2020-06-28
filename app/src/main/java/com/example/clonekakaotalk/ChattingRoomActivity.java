@@ -1,8 +1,11 @@
 package com.example.clonekakaotalk;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +26,7 @@ import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoom
 import com.example.clonekakaotalk.utils.footer.chattingRoom.FragmentChattingRoomEmoticonMenu;
 import com.example.clonekakaotalk.utils.footer.chattingRoom.HashTagSearchEditText;
 import com.example.clonekakaotalk.utils.footer.chattingRoom.SharedChattingRoomViewData;
+import com.example.clonekakaotalk.utils.sqlite.ChattingDatabaseManager;
 import com.example.clonekakaotalk.utils.windowSoftware.WindowSoft;
 
 import lombok.Getter;
@@ -34,10 +38,13 @@ public class ChattingRoomActivity extends AppCompatActivity {
     private ImageButton _chattingRoomFooterMenuBtn;
     private ImageButton _chattingRoomEmoticonMenuBtn;
     private ImageButton _searchWithHashTagBtn;
+    private ImageButton _sendMessageBtn;
     private ImageButton _hashTagIcon;
     private HashTagSearchEditText _chattingInputEditText;
     private DrawerLayout _mainLayout;
     private ImageButton _sideBarBtn;
+
+    private ChattingDatabaseManager _chattingDatabaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +52,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chatting_room);
 
         // init
-        _chattingRoomFooterMenuBtn = findViewById(R.id.chatting_room_footer_menu_btn);
-        _chattingRoomEmoticonMenuBtn = findViewById(R.id.chatting_room_footer_emoticon_btn);
-        _searchWithHashTagBtn = findViewById(R.id.chatting_room_footer_search_with_hashtag_btn);
-        _chattingInputEditText = findViewById(R.id.chatting_room_footer_chatting_input);
-        _hashTagIcon = findViewById(R.id.chatting_room_footer_hashtag_icon);
-        _mainLayout = findViewById(R.id.chatting_room_main_container);
-        _sideBarBtn = findViewById(R.id.chatting_room_side_bar_btn);
-
-        ObjectStorage.setContext(getApplicationContext());
-        ObjectStorage.setFragmentManager(getSupportFragmentManager());
-        ObjectStorage.setDrawerLayout(_mainLayout);
-        ObjectStorage.setChattingInputEditText(_chattingInputEditText);
-        ObjectStorage.setChattingRoomEmoticonMenuBtn(_chattingRoomEmoticonMenuBtn);
-        ObjectStorage.setSearchWithHashTagBtn(_searchWithHashTagBtn);
-        ObjectStorage.setHashTagIcon(_hashTagIcon);
+        initializeView();
 
         Intent intent = getIntent();
         _initProfileFromParcel(intent);
@@ -70,6 +63,10 @@ public class ChattingRoomActivity extends AppCompatActivity {
         _initChattingInputEditText();
         _initSideBarBtn();
         _initSideBar();
+        _initSendMessageButton();
+
+        // Database
+        this._chattingDatabaseManager = ChattingDatabaseManager.getInstance(this);
 
     }
 
@@ -95,6 +92,28 @@ public class ChattingRoomActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initialize views
+     */
+    private void initializeView() {
+        _chattingRoomFooterMenuBtn = findViewById(R.id.chatting_room_footer_menu_btn);
+        _chattingRoomEmoticonMenuBtn = findViewById(R.id.chatting_room_footer_emoticon_btn);
+        _searchWithHashTagBtn = findViewById(R.id.chatting_room_footer_search_with_hashtag_btn);
+        _sendMessageBtn = findViewById(R.id.chatting_room_footer_send_message_btn);
+        _chattingInputEditText = findViewById(R.id.chatting_room_footer_chatting_input);
+        _hashTagIcon = findViewById(R.id.chatting_room_footer_hashtag_icon);
+        _mainLayout = findViewById(R.id.chatting_room_main_container);
+        _sideBarBtn = findViewById(R.id.chatting_room_side_bar_btn);
+
+        ChattingObjectStorage.setContext(getApplicationContext());
+        ChattingObjectStorage.setFragmentManager(getSupportFragmentManager());
+        ChattingObjectStorage.setDrawerLayout(_mainLayout);
+        ChattingObjectStorage.setChattingInputEditText(_chattingInputEditText);
+        ChattingObjectStorage.setChattingRoomEmoticonMenuBtn(_chattingRoomEmoticonMenuBtn);
+        ChattingObjectStorage.setSearchWithHashTagBtn(_searchWithHashTagBtn);
+        ChattingObjectStorage.setHashTagIcon(_hashTagIcon);
+    }
+
     // ---------------------------------------------------------------------------------------------
     // onClickEventListener
 
@@ -104,7 +123,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
 
         // remove BottomMenu
         if (Buttons.isAnyMenuActivated()) {
-            Buttons.removeAllMenu(ObjectStorage.fragmentTransaction());
+            Buttons.removeAllMenu(ChattingObjectStorage.fragmentTransaction());
             return;
         }
 
@@ -122,7 +141,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (SharedChattingRoomViewData.isSearchWithHashOn()) {
-                    ObjectStorage.switchHashTagSearchMode(false);
+                    ChattingObjectStorage.switchHashTagSearchMode(false);
                 }
                 WindowSoft.hideKeyboardFrom(getApplicationContext(), _chattingInputEditText);
                 Buttons.BOTTOM_MENU_BUTTON.showAndRemoveMenuByClickingButton();
@@ -150,14 +169,31 @@ public class ChattingRoomActivity extends AppCompatActivity {
         this._searchWithHashTagBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Buttons.removeAllMenu(ObjectStorage.fragmentTransaction());
+                Buttons.removeAllMenu(ChattingObjectStorage.fragmentTransaction());
 
                 SharedChattingRoomViewData.setSearchWithHashOnFlag(true);
-                ObjectStorage.switchHashTagSearchMode(true);
+                ChattingObjectStorage.switchHashTagSearchMode(true);
 
                 // request focus
                 _chattingInputEditText.requestFocus();
                 WindowSoft.showKeyboardFrom(getApplicationContext(), _chattingInputEditText);
+            }
+        });
+    }
+
+    /**
+     * Send message
+     */
+    private void _initSendMessageButton() {
+        _sendMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentValues addMessage = new ContentValues();
+
+                addMessage.put("user_name", _selectedProfile.getNickname());
+                addMessage.put("message", _chattingInputEditText.getText().toString());
+
+                _chattingDatabaseManager.insert(addMessage);
             }
         });
     }
@@ -171,10 +207,36 @@ public class ChattingRoomActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 // remove BottomMenu
                 if (Buttons.isAnyMenuActivated()) {
-                    Buttons.removeAllMenu(ObjectStorage.fragmentTransaction());
+                    Buttons.removeAllMenu(ChattingObjectStorage.fragmentTransaction());
                     _chattingInputEditText.requestFocus();
                 }
                 return false;
+            }
+        });
+
+        this._chattingInputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // visualize send button
+                if (s.toString().length() > 0) {
+                    _searchWithHashTagBtn.setVisibility(View.GONE);
+                    _sendMessageBtn.setVisibility(View.VISIBLE);
+
+                // visualize hash tag button
+                } else {
+                    _searchWithHashTagBtn.setVisibility(View.VISIBLE);
+                    _sendMessageBtn.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -202,7 +264,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
     /**
      * ObjectStorage for handling buttons in ChattingRoom
      */
-    public static class ObjectStorage {
+    public static class ChattingObjectStorage {
         private static Context _applicationContext;
         private static FragmentManager _fragmentManager;
         private static DrawerLayout _mainLayout;
@@ -283,7 +345,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
             @Override
             public void showAndRemoveMenuByClickingButton() {
                 updateButtonStatus(this);
-                FragmentTransaction transaction = ObjectStorage.fragmentTransaction();
+                FragmentTransaction transaction = ChattingObjectStorage.fragmentTransaction();
 
                 if (isOn()) {
                     transaction.replace(R.id.chatting_room_footer_bottom_menu, getFragment()).commitAllowingStateLoss();
@@ -296,7 +358,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
             @Override
             public void showAndRemoveMenuByClickingButton() {
                 updateButtonStatus(this);
-                FragmentTransaction transaction = ObjectStorage.fragmentTransaction();
+                FragmentTransaction transaction = ChattingObjectStorage.fragmentTransaction();
 
                 if (isOn()) {
                     transaction.replace(R.id.chatting_room_footer_bottom_menu, getFragment()).commitAllowingStateLoss();
@@ -313,11 +375,11 @@ public class ChattingRoomActivity extends AppCompatActivity {
                 SharedChattingRoomViewData.setSideBarOn(true);
 
                 if (SharedChattingRoomViewData.isSearchWithHashOn()) {
-                    ObjectStorage.switchHashTagSearchMode(false);
+                    ChattingObjectStorage.switchHashTagSearchMode(false);
                 }
-                WindowSoft.hideKeyboardFrom(ObjectStorage.applicationContext(), ObjectStorage.chattingInputEditText());
-                Buttons.removeAllMenu(ObjectStorage.fragmentTransaction());
-                ObjectStorage.mainLayout().openDrawer(Gravity.RIGHT);
+                WindowSoft.hideKeyboardFrom(ChattingObjectStorage.applicationContext(), ChattingObjectStorage.chattingInputEditText());
+                Buttons.removeAllMenu(ChattingObjectStorage.fragmentTransaction());
+                ChattingObjectStorage.mainLayout().openDrawer(Gravity.RIGHT);
             }
         }
         ;
@@ -369,7 +431,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
                 return;
 
             if (SharedChattingRoomViewData.isSideBarOn()) {
-                ObjectStorage.mainLayout().closeDrawer(Gravity.RIGHT);
+                ChattingObjectStorage.mainLayout().closeDrawer(Gravity.RIGHT);
             }
 
             for (Buttons button : values()) {

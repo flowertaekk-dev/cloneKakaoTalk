@@ -132,6 +132,14 @@
                     android:background="@color/colorTransparent"
                     android:src="@android:drawable/ic_menu_zoom" />
 
+                <ImageButton
+                    android:id="@+id/chatting_room_footer_send_message_btn"
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorYellow"
+                    android:visibility="gone"
+                    android:src="@drawable/send_arrow" />
+
             </LinearLayout>
 
 

@@ -7,4 +7,5 @@
     <color name="colorGray">#eee</color>
     <color name="colorTransparent">#0000</color>
     <color name="colorChattingDefault">#3c7db5</color>
+    <color name="colorYellow">#fcec03</color>
 </resources>

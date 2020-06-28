@@ -16,7 +16,7 @@ public class HashTagSearchEditText extends androidx.appcompat.widget.AppCompatEd
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (SharedChattingRoomViewData.isSearchWithHashOn()) {
-                ChattingRoomActivity.ObjectStorage.switchHashTagSearchMode(false);
+                ChattingRoomActivity.ChattingObjectStorage.switchHashTagSearchMode(false);
                 SharedChattingRoomViewData.setSearchWithHashOnFlag(false);
                 return false;
             }
