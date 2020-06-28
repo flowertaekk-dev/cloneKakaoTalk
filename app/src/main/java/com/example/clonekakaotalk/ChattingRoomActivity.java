@@ -444,7 +444,6 @@ public class ChattingRoomActivity extends AppCompatActivity {
             @Override
             void showAndRemoveMenuByClickingButton() {
                 // updateButtonStatus(this); // it doesn't seem to work..?
-                SharedChattingRoomViewData.setSideBarOn(true);
 
                 if (SharedChattingRoomViewData.isSearchWithHashOn()) {
                     ChattingObjectStorage.switchHashTagSearchMode(false);
@@ -452,6 +451,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
                 WindowSoft.hideKeyboardFrom(ChattingObjectStorage.applicationContext(), ChattingObjectStorage.chattingInputEditText());
                 Buttons.removeAllMenu(ChattingObjectStorage.fragmentTransaction());
                 ChattingObjectStorage.mainLayout().openDrawer(Gravity.RIGHT);
+                SharedChattingRoomViewData.setSideBarOn(true);
             }
         }
         ;
@@ -504,6 +504,7 @@ public class ChattingRoomActivity extends AppCompatActivity {
 
             if (SharedChattingRoomViewData.isSideBarOn()) {
                 ChattingObjectStorage.mainLayout().closeDrawer(Gravity.RIGHT);
+                SharedChattingRoomViewData.setSideBarOn(false);
             }
 
             for (Buttons button : values()) {
